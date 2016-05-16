@@ -1,0 +1,37 @@
+type Contact implements Node {
+  id: ID!
+  name: String
+}
+
+type ContactConnection {
+  pageInfo: PageInfo!
+  edges: [ContactEdge]
+  totalCount: Int
+}
+
+type ContactEdge {
+  node: Contact
+  cursor: String!
+}
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Query {
+  node(id: ID!): Node
+  viewer: User
+}
+
+type User implements Node {
+  id: ID!
+  name: String
+  contacts(after: String, first: Int, before: String, last: Int): ContactConnection
+}
