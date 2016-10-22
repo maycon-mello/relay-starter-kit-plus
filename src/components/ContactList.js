@@ -18,17 +18,13 @@ class ContactList extends React.Component {
   }
 
   render() {
-    let contacts = this.props.viewer.contacts;
-    const items = contacts.edges.map(edge =>
-      <ListItem contact={edge.node}/>
-    );
+    let { contacts } = this.props.viewer;
+    const items = contacts.edges.map(({node}) => <ListItem contact={node}/>);
     return (
       <div>
         <h1 style={{color: 'blue'}}>Tesss</h1>
         <button onClick={this.onClick}>{this.state.count} clicks</button>
-        <ul>
-          {items}
-        </ul>
+        <ul> {items} </ul>
       </div>
     );
   }
@@ -41,8 +37,7 @@ export default Relay.createContainer(ContactList, {
         contacts(first: 3) {
           edges {
             node {
-              id,
-              name,
+              ${ListItem.getFragment('contact')}
             },
           },
         },
