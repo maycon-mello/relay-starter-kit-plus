@@ -7,10 +7,15 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import updateSchema from './build/updateSchema';
 
-const APP_PORT = 7474;
+const APP_PORT = 3000;
 
 var compiler = webpack({
-  entry: path.resolve(__dirname, 'src', 'main.js'),
+  entry: [
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/dev-server',
+    './src/index'
+  ],
   module: {
     loaders: [
       {
@@ -20,13 +25,21 @@ var compiler = webpack({
       },
     ],
   },
-  output: {filename: 'app.js', path: '/'}
+  output: {
+    path: path.join(__dirname, 'public'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
+  },
+  plugins: [
+   new webpack.HotModuleReplacementPlugin()
+ ]
 });
 
 gulp.task('webpack-dev-server', function() {
   var app = new WebpackDevServer(compiler, {
-    contentBase: '/public/',
-    publicPath: '/js/',
+    publicPath: '/static/',
+    hot: true,
+    historyApiFallback: true,
     stats: {
       colors: true,
       assets: false,
@@ -49,5 +62,5 @@ gulp.task('compile-schema', function() {
 });
 
 gulp.task('default', ['compile-schema', 'webpack-dev-server'], function() {
-    gulp.watch('./src/data/**/*.js', ['compile-schema']);
+  gulp.watch('./src/data/**/*.js', ['compile-schema']);
 })

@@ -14,6 +14,10 @@ const ContactType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField('Contact'),
     name: { type: GraphQLString },
+    age: {
+      type: GraphQLString,
+      resolve: () => "Test222"
+    },
   }),
   interfaces: [nodeInterface],
 });

@@ -1,6 +1,7 @@
 type Contact implements Node {
   id: ID!
   name: String
+  age: String
 }
 
 type ContactConnection {
