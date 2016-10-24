@@ -14,10 +14,7 @@ const ContactType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField('Contact'),
     name: { type: GraphQLString },
-    age: {
-      type: GraphQLString,
-      resolve: () => "Test222"
-    },
+    age: { type: GraphQLString },
   }),
   interfaces: [nodeInterface],
 });
@@ -42,7 +39,9 @@ registerModelType({
   name: 'Contact',
   type: ContactType,
   modelType: Contact,
-  fetchById: (id) => getContact(id),
+  fetchById: (id) => {
+    return getContact(id)
+  },
 });
 
 export default ContactType;

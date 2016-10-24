@@ -7,6 +7,6 @@ import MutationType from './mutations/MutationType';
 
 export default new GraphQLSchema({
   query: RootType,
-  // mutation: MutationType,
+  mutation: MutationType,
   types,
 });

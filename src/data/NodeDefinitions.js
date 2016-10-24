@@ -15,6 +15,8 @@ const fetchDataById = (globalId) => {
       return fetcher.resolve(id);
     }
   }
+
+  console.log("unable to fetch data by id", idFetchers, type, id)
   return null;
 }
 
@@ -28,6 +30,7 @@ const resolveType = (obj) => {
       return typeResolver.resolve(obj);
     }
   }
+  console.log("unable to resolve type", obj, typeResolvers)
   return null;
 }
 

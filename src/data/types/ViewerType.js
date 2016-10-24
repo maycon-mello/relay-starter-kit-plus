@@ -1,18 +1,19 @@
-import { GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLID } from 'graphql';
 import { nodeInterface, registerModelType } from '../NodeDefinitions';
 import {
   connectionDefinitions,
   connectionFromArray,
   connectionArgs,
   globalIdField,
+  fromGlobalId,
 } from 'graphql-relay';
 
 // Data
 import getUser from '../api/getUser';
-import { getContacts } from '../api/contact';
+import { getContacts, getContact } from '../api/contact';
 import User from '../model/User';
 
-import { ContactConnectionType } from './ContactType';
+import ContactType, { ContactConnectionType } from './ContactType';
 
 /**
  * Define Type
@@ -32,6 +33,21 @@ const UserType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (_, args) => connectionFromArray(getContacts(), args),
     },
+    contact: {
+      type: ContactType,
+      description: 'Get contact',
+      args: {
+        contactId: {
+          type: GraphQLID
+        }
+      },
+      resolve: (_, args) => {
+        let contactId = fromGlobalId(args.contactId).id;
+
+        console.log(contactId);
+        return getContact(contactId);
+      }
+    }
   }),
   interfaces: [nodeInterface],
 });

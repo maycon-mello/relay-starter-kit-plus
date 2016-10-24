@@ -23,6 +23,10 @@ var compiler = webpack({
         loader: 'babel',
         test: /\.js$/,
       },
+      {
+        loaders: ['style-loader', 'css-loader'],
+        test: /\.css$/,
+      },
     ],
   },
   output: {

@@ -1,20 +1,53 @@
 import React from 'react';
 import Relay from 'react-relay';
-import {IndexRoute, Route, Router, browserHistory, applyRouterMiddleware} from 'react-router';
-
+import {
+  Route,
+  Router,
+  hashHistory,
+  applyRouterMiddleware
+} from 'react-router';
+import RelayRouter from 'react-router-relay';
 import RelayLocalSchema from 'relay-local-schema';
+
 import schema from './data/schema';
 
-const layer = new RelayLocalSchema.NetworkLayer({schema});
-Relay.injectNetworkLayer(layer);
+Relay.injectNetworkLayer(new RelayLocalSchema.NetworkLayer({ schema }));
 
-import RelayRouter from 'react-router-relay';
 import AppHomeRoute from './routes/HomeRouter';
 
 // Components
-import ContactList from './components/ContactList';
+import * as ContactListView from './views/ContactList';
+import GraphiQL from './tools/GraphiQL';
+//
 
-export const app = <Relay.RootContainer
-  Component={ContactList}
-  route={new AppHomeRoute()}
-/>
+const ViewerQueries = {
+  viewer: () => Relay.QL`query { viewer }`
+};
+
+import './style.css';
+
+// const renderFailure = () => <div>Error</div>;
+
+// export const app = <Relay.RootContainer
+//   Component={ContactList}
+//   route={new AppHomeRoute()}
+// />
+//console.log(ContactListView);
+
+const routes = [
+  ContactListView.getRoute(ViewerQueries),
+  <Route
+    path="/graphiql"
+    component={GraphiQL}
+  />
+];
+
+export const app = (
+  <Router
+    history={hashHistory}
+    render={applyRouterMiddleware(RelayRouter)}
+    environment={Relay.Store}
+    routes={routes}
+    key={Date.now()}
+  />
+);
